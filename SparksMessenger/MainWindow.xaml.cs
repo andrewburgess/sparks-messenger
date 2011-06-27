@@ -7,7 +7,7 @@ namespace SparksMessenger
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
 	{
 		private BroadcastController controller { get; set; }
 		public MainWindow()
@@ -19,6 +19,11 @@ namespace SparksMessenger
 		private void button1_Click(object sender, RoutedEventArgs e)
 		{
 			controller.SendSignOnMessage(Guid.NewGuid());
+		}
+
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			controller.Close();
 		}
 	}
 }

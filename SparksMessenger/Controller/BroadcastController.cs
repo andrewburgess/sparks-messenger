@@ -18,7 +18,7 @@ namespace SparksMessenger.Controller
 		private UdpClient UDPBroadcaster { get; set; }
 		private Thread BroadcastThread { get; set; }
 
-		private IPEndPoint localIPEndPoint;
+		private IPEndPoint _localIpEndPoint;
 
 		#region Events
 		public event SignOnEvent UserSignedOn;
@@ -29,8 +29,8 @@ namespace SparksMessenger.Controller
 		/// </summary>
 		public BroadcastController()
 		{
-			localIPEndPoint = new IPEndPoint(IPAddress.Any, 15698);
-			UDPBroadcaster = new UdpClient(localIPEndPoint) { EnableBroadcast = true };
+			_localIpEndPoint = new IPEndPoint(IPAddress.Any, 15698);
+			UDPBroadcaster = new UdpClient(_localIpEndPoint) { EnableBroadcast = true };
 
 			Running = true;
 			BroadcastThread = new Thread(ListenForBroadcasts);
@@ -60,7 +60,7 @@ namespace SparksMessenger.Controller
 			{
 				if (UDPBroadcaster.Available > 0)
 				{
-					var data = UDPBroadcaster.Receive(ref localIPEndPoint);
+					var data = UDPBroadcaster.Receive(ref _localIpEndPoint);
 
 					var message = (Message)deserializer.Deserialize(new MemoryStream(data));
 					HandleMessage(message);
@@ -84,6 +84,12 @@ namespace SparksMessenger.Controller
 					}
 					break;
 			}
+		}
+
+		public void Close()
+		{
+			Running = false;
+			UDPBroadcaster.Close();
 		}
 	}
 }

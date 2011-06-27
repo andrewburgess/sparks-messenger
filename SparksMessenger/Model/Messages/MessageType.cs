@@ -4,8 +4,7 @@ namespace SparksMessenger.Model.Messages
 	{
 		SignOn,
 		SignOff,
-		BeginChat,
-		StatusChanged,
-		RequestUserInfo
+		TextMessage,
+		StatusChanged
 	}
 }
